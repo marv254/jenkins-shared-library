@@ -1,19 +1,27 @@
 #!/usr/bin/env groovy
+
 package com.example
 
-class  Docker implements  Serializable {
+class Docker implements Serializable{
     def script
-
     Docker(script){
         this.script=script
     }
-    def buildDockerImage(String imageName) {
-        script.echo 'building Image of the application'
-        script.withCredentials([script.usernamePassword(credentialsId: 'nexus-docker-repo', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-            script.sh "docker build -t $script.imageName ."
-            script.sh "echo $script.PASS | docker login -u $script.USER --password-stdin 127.0.0.1:8083"
+
+    def dockerLogin(){
+        script.echo "Logging in into Docker Hub ..."
+        script.withCredentials([script.usernamePasswordVariable(credentialsId: 'docker-hub-creds' , username: 'USER', password: 'PASS')]){
+            script.sh 'docker login '
         }
     }
 
+    def buildImage(String imageName){
+        script.echo "Building image of $script.BRANCH_NAME branch of the application ..."
+        script.sh "docker build -t $script.imageName ."
+    }
 
+    def dockerPush(String imageName){
+        script.echo "Deploying docker Image Application on  Docker Hub ..."
+        script.sh "docker push $script.imageName"
+    }
 }

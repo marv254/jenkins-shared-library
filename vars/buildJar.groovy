@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def call(){
-    echo "building the application.. "
-    sh 'mvn package'
+def call (){
+    echo "Building Jar from the application on $BRANCH_NAME branch ..."
+    sh "mvn package"
 }
