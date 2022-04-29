@@ -18,11 +18,11 @@ class Docker implements Serializable{
 
     def buildImage(String imageName){
         script.echo "Building image of $script.BRANCH_NAME branch of the application ..."
-        script.sh "docker build -t $script.imageName ."
+        script.sh "docker build -t $imageName ."
     }
 
     def dockerPush(String imageName){
         script.echo "Deploying docker Image Application on  Docker Hub ..."
-        script.sh "docker push $script.imageName"
+        script.sh "docker push $imageName"
     }
 }
